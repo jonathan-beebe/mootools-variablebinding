@@ -133,26 +133,44 @@ console.log('copycat.instinct', copycat.get('instinct'));
 
 window.addEvent('domready', function() {
 
+  // Create an Element from our paragraph element.
   p = $('test');
 
+  // Create a new class to bind with.
   t = new MyClass();
+
+  // One-way binding of 'text' to instance `t`.
   p.bindVar('text', t);
-  p.bindVar('data-id', t);
+
+  // Two-way binding of p.data-id to t.id.
+  p.bindVar('data-id', t, 'id', true);
 
   p.set('text', 'monkeys love bananas');
   p.set('data-id', 'crizazzle');
-  console.log('test', t);
 
+  // Now try these in your console:
+  //
+  // t.get('data-id'); // crizazzle
+  //
+  // t.set('id', 'monkey');
+  // p.get('data-id'); // monkey
+
+  // Grab the input and make an Element out of it.
   i = $('myInput');
 
+  // Create a class to bind to our input.
   it = new MyClass();
 
+  // Create a two-way binding between i.value and it.value
   i.bindVar('value', it, true);
   i.set('value', 'monkeys');
 
-  //it.bindVar('value', i);
+  // Now try these in your console:
+  //
+  // it.get('value'); // monkeys
+  // it.set('value', 'bananas'); // input now shows 'bananas'
 
-  console.log('it', it);
+  i.unbindVar('value', it);
 
   // Create a checkbox and bind it's value to an object and a paragraph
   // Demonstrates using a class to watch the changes in a checkbox input
@@ -160,12 +178,7 @@ window.addEvent('domready', function() {
   c = $('myCheck');
   ct = new MyClass();
 
-  c.bindVar('checked', ct);
-
-  ct.bindVar('checked', function(key, value){
-    console.log('calling custom callback on c with ' + key + ' = ' + value);
-    c.set('checked', value);
-  }.bind(c));
+  c.bindVar('checked', ct, true);
 
   c.bindVar('checked', function(key, value) {
     console.log('calling custom callback on P with ' + key + ' = ' + value);

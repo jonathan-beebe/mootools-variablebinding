@@ -20,7 +20,8 @@ Element.implement({
     var twoWay = (arguments[arguments.length - 1] === true);
 
     // If this is an input, wire up the change event so we can also
-    // notify target of user-changes to value.
+    // notify target of user-changes to value. This is important because user-
+    // edited values bypass the `set` method, so we trap them separately.
     if(this._isUserInputChange(this, key)) {
 
       if(!this._boundEvents[key]) {
@@ -32,9 +33,7 @@ Element.implement({
       if(!this._boundEvents[key]) {
         this._boundEvents[key] = {
           func: function(event) {
-            Object.each(this._boundEvents[key].targets, function(item) {
-              this._notify(item, key, this.get(key));
-            }.bind(this));
+            this._notifyAll(key, this.get(key));
           }.bind(this),
           targets: {}
         };
@@ -44,24 +43,20 @@ Element.implement({
       // add a change-event listener and add the target to the bound list.
       if(!this._boundEvents[key].targets[target]) {
         this.addEvent('change', this._boundEvents[key].func);
-        this._boundEvents[key].targets[target] = {
-          target: target,
-          key: targetKey
-        };
       }
 
     }
-    // This is not a property editable via user input, so bind it via
-    // the normal mechanism.
-    else {
-      if(!this._bound[key]) {
-        this._bound[key] = [];
-      }
-      this._bound[key].push({
-        target: target,
-        key: targetKey
-      });
+
+    // Bind the key via the normal mechanism. Even if we bound the key above
+    // using the event mechanism we still need to bind it here in case the
+    // element's `set` method is ever used to change the value.
+    if(!this._bound[key]) {
+      this._bound[key] = [];
     }
+    this._bound[key].push({
+      target: target,
+      key: targetKey
+    });
 
     // Are we binding two-ways?
     if (twoWay && typeOf(target.bindVar) === 'function') {
@@ -101,7 +96,10 @@ Element.implement({
     var twoWay = (arguments[arguments.length - 1] === true);
 
     if(!this._bound[key]) { return; }
+
     if(target) {
+
+      // Unbind the var from the _bound set.
       this._bound[key].some(function(item, index, array) {
         if(item.target === target && item.key === targetKey) {
 
@@ -114,6 +112,7 @@ Element.implement({
           return true;
         }
       });
+
     }
     else {
       delete this._bound[key];
