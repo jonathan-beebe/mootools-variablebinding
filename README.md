@@ -8,24 +8,27 @@ Examples
 
 Let's say you have two classes defined as follows:
 
+``` javascript
 
-	// Create a test class implementing VariableBinding.
-	// Our class will adopt the methods of VariableBinding.
-	MyClass = new Class({
-	  Implements: VariableBinding
-	});
+// Create a test class implementing VariableBinding.
+// Our class will adopt the methods of VariableBinding.
+MyClass = new Class({
+  Implements: VariableBinding
+});
 
-	// Create a test class extending VariableBinding.
-	// Our class is extending, so it can customize the constructor behavior.
-	MyOtherClass = new Class({
-	  Extends: VariableBinding,
-	  initialize: function(params) {
-		// Set the datastore to be this instance.
-		// Thus using instance.key === instance.get('key').
-		// If you don't pass `this` into parent it'll use the default _store.
-		this.parent(this);
-	  }
-	});
+// Create a test class extending VariableBinding.
+// Our class is extending, so it can customize the constructor behavior.
+MyOtherClass = new Class({
+  Extends: VariableBinding,
+  initialize: function(params) {
+	// Set the datastore to be this instance.
+	// Thus using instance.key === instance.get('key').
+	// If you don't pass `this` into parent it'll use the default _store.
+	this.parent(this);
+  }
+});
+
+```
 
 And then you start to use them:
 
