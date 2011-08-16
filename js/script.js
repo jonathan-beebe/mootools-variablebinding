@@ -34,8 +34,6 @@ MyOtherClass = new Class({
   }
 });
 
-/*
-
 // Create our test instances
 
 // Like cats? Yes.
@@ -119,7 +117,6 @@ copycat.set('instinct', 'micing');
 console.log('cat.instinct', cat.get('instinct'));
 console.log('copycat.instinct', copycat.get('instinct'));
 
-*/
 
 
 

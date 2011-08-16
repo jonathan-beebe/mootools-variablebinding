@@ -3,6 +3,22 @@ Description
 
 Provides one and two-way data binding of variables between Mootools Classes and Elements.
 
+The Project
+===========
+
+You'll mainly be concerned with two files `js/classes/VariableBinding.js` and
+`js/classes/Element.js`.
+
+The rest of the project is for testing. You'll see it includes Mootools and other
+scripts to make sure everything works right.
+
+Submodules
+----------
+
+This project includes google's closure library in the `vendors` folder. It's
+only used for the unit testing. Overkill? Yes. But it's what I'm used to. If
+you have a simpler suggestion I'm all ears.
+
 Examples
 ========
 
@@ -30,7 +46,7 @@ MyOtherClass = new Class({
 
 ```
 
-And then you start to use them:
+Bind them together as follows:
 
 ``` javascript
 
