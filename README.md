@@ -30,78 +30,94 @@ Let's say you have two classes defined as follows:
 And then you start to use them:
 
 ``` javascript
-	// Like cats?
-	var cat = new MyClass();
 
-	// Like copycats?
-	var copycat = new MyOtherClass();
+// Like cats?
+var cat = new MyClass();
 
-	cat.set('favorite_food', 'mice');
-	copycat.set('favorite_food', 'corn');
+// Like copycats?
+var copycat = new MyOtherClass();
 
-	// Each cat has unique tastes.
-	console.log(cat.get('favorite_food')); // 'mice'
-	console.log(copycat.get('favorite_food')); // 'corn
+cat.set('favorite_food', 'mice');
+copycat.set('favorite_food', 'corn');
 
-	// Now copycat begins to get annoying.
-	// Copy Cat want's to know about all the changes to its friend.
-	cat.bindVar('favorite_food', copycat);
+// Each cat has unique tastes.
+console.log(cat.get('favorite_food')); // 'mice'
+console.log(copycat.get('favorite_food')); // 'corn
 
-	// Our main cat decides he/she has a new favorite food.
-	cat.set('favorite_food', 'bananas');
+// Now copycat begins to get annoying.
+// Copy Cat want's to know about all the changes to its friend.
+cat.bindVar('favorite_food', copycat);
 
-	// Now they will both be the same value.
-	console.log(cat.get('favorite_food')); // 'bananas'
-	console.log(copycat.get('favorite_food')); // 'bananas'
-````
+// Our main cat decides he/she has a new favorite food.
+cat.set('favorite_food', 'bananas');
+
+// Now they will both be the same value.
+console.log(cat.get('favorite_food')); // 'bananas'
+console.log(copycat.get('favorite_food')); // 'bananas'
+
+```
 
 Simple, eh? How about undoing the binding?
 
-	cat.bindVar('favorite_activity', copycat);
-	cat.set('favorite_activity', 'napping');
+``` javascript
 
-	// Now both cat's have the same favorite_activity: 'napping'.
+cat.bindVar('favorite_activity', copycat);
+cat.set('favorite_activity', 'napping');
 
-	// Cat's had enough of this!
-	cat.unbindVar('favorite_activity', copycat);
-	cat.set('favorite_activity', 'ignoring copycat');
+// Now both cat's have the same favorite_activity: 'napping'.
 
-	console.log(cat.get('favorite_activity')); // 'ignoring copycat'
-	console.log(copycat.get('favorite_activity')); // 'napping'
+// Cat's had enough of this!
+cat.unbindVar('favorite_activity', copycat);
+cat.set('favorite_activity', 'ignoring copycat');
+
+console.log(cat.get('favorite_activity')); // 'ignoring copycat'
+console.log(copycat.get('favorite_activity')); // 'napping'
+
+```
 
 Nice. But you're bound to need something a bit more flexible.
 How about when you want to bind to variables, but they aren't the same key?
 
-	// Copy cat decides the game's over...now it's time for opposites!
-	// Let's bind cat's favorite_activity to copycat's least_favorite_activity.
-	cat.bindVar('favorite_activity', copycat, 'least_favorite_activity');
+``` javascript
 
-	cat.set('favorite_activity', 'climbing trees');
+// Copy cat decides the game's over...now it's time for opposites!
+// Let's bind cat's favorite_activity to copycat's least_favorite_activity.
+cat.bindVar('favorite_activity', copycat, 'least_favorite_activity');
 
-	console.log(cat.get('favorite_activity')); // 'climbing trees'
-	console.log(copycat.get('favorite_activity')); // 'napping'
-	console.log(copycat.get('least_favorite_activity')); // 'climbing trees'
+cat.set('favorite_activity', 'climbing trees');
+
+console.log(cat.get('favorite_activity')); // 'climbing trees'
+console.log(copycat.get('favorite_activity')); // 'napping'
+console.log(copycat.get('least_favorite_activity')); // 'climbing trees'
+
+```
 
 Well, two can play at this game. Cat decides to copy copycat...
 
-	// Bind the `instinct` property two-ways.
-	cat.bindVar('instinct', copycat, true);
+``` javascript
 
-	// Set cat's instinct:
-	cat.set('instinct', 'killer');
+// Bind the `instinct` property two-ways.
+cat.bindVar('instinct', copycat, true);
 
-	// Now they both share the same instinct:
-	console.log(cat.get('instinct')); // 'killer'
-	console.log(copycat.get('instinct')); // 'killer'
+// Set cat's instinct:
+cat.set('instinct', 'killer');
 
-	// Set copycat's instinct:
-	copycat.set('instinct', 'napping');
+// Now they both share the same instinct:
+console.log(cat.get('instinct')); // 'killer'
+console.log(copycat.get('instinct')); // 'killer'
 
-	// They're still the same value!
-	console.log(cat.get('instinct')); // 'napping'
-	console.log(copycat.get('instinct')); // 'napping'
+// Set copycat's instinct:
+copycat.set('instinct', 'napping');
+
+// They're still the same value!
+console.log(cat.get('instinct')); // 'napping'
+console.log(copycat.get('instinct')); // 'napping'
+
+```
 
 And unbindbing works two-ways as well:
+
+``` javascript
 
 // You can unbind from either cat, and the other will also be un-bound.
 copycat.unbindVar('instinct', cat, true);
@@ -112,3 +128,5 @@ copycat.set('instinct', 'micing');
 
 console.log(cat.get('instinct')); // 'killer'
 console.log(copycat.get('instinct')); // 'micing'
+
+```
