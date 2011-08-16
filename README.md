@@ -29,6 +29,7 @@ Let's say you have two classes defined as follows:
 
 And then you start to use them:
 
+``` javascript
 	// Like cats?
 	var cat = new MyClass();
 
@@ -52,6 +53,7 @@ And then you start to use them:
 	// Now they will both be the same value.
 	console.log(cat.get('favorite_food')); // 'bananas'
 	console.log(copycat.get('favorite_food')); // 'bananas'
+````
 
 Simple, eh? How about undoing the binding?
 
