@@ -1,9 +1,5 @@
 Element.implement({
 
-  _bound: {},
-
-  _boundEvents: {},
-
   /**
    * Bind a property of the instance to a target Object/Class
    *
@@ -11,6 +7,10 @@ Element.implement({
    * @param {Object|Class} target The target to update on changes.
    */
   bindVar: function(key, target, opt_c) {
+
+    this._initPrivateBoundProperties();
+
+    console.log('will bind ' + key + ' to target', target);
 
     // If we have a custom key defined in opt_c, use it as the target's key.
     var targetKey = (typeOf(opt_c) === 'string') ? opt_c : key;
@@ -23,6 +23,8 @@ Element.implement({
     // notify target of user-changes to value. This is important because user-
     // edited values bypass the `set` method, so we trap them separately.
     if(this._isUserInputChange(this, key)) {
+
+      console.log('is user-changeable...will bind to event');
 
       if(!this._boundEvents[key]) {
         this._boundEvents = {};
@@ -58,6 +60,8 @@ Element.implement({
       key: targetKey
     });
 
+    console.log('this._bound', this._bound);
+
     // Are we binding two-ways?
     if (twoWay && typeOf(target.bindVar) === 'function') {
       // bind target.targetKey to this.key
@@ -66,11 +70,24 @@ Element.implement({
   },
 
   /**
+   * Initialize the instance's bound properties, if not already done.
+   * This should be done in the constructor, but since Element is not a class
+   * I cannot override `initialize`. Is there a way to add code to the
+   * Element constructor?
+   */
+  _initPrivateBoundProperties: function() {
+    if(!this._bound) { this._bound = {}; }
+    if(!this._boundEvents) { this._boundEvents = {}; }
+  },
+
+  /**
    * Is this element editable via user-input?
    * @private
    * @return {boolean} True if user-editable element, false otherwise.
    */
   _isUserInputChange: function(elem, key) {
+
+    this._initPrivateBoundProperties();
 
     // user-editable properties
     var props = ['value', 'checked', 'selected'];
@@ -88,6 +105,7 @@ Element.implement({
    */
   unbindVar: function(key, target, opt_c) {
 
+    this._initPrivateBoundProperties();
     // If we have a custom key defined in opt_c, use it as the target's key.
     var targetKey = (typeOf(opt_c) === 'string') ? opt_c : key;
 
@@ -123,6 +141,7 @@ Element.implement({
    * Copied from Mootools Element, with additions
    */
   set: function(prop, value){
+    this._initPrivateBoundProperties();
     var property = Element.Properties[prop];
     (property && property.set) ? property.set.call(this, value) : this.setProperty(prop, value);
     this._notifyAll(prop, value);
@@ -138,6 +157,8 @@ Element.implement({
    */
   _notifyAll: function(key, value) {
 
+    this._initPrivateBoundProperties();
+
     if(!this._bound[key]) { return; }
 
     Array.each(this._bound[key], function(item) {
@@ -148,18 +169,20 @@ Element.implement({
 
   _notify: function(item, key, value) {
 
-      // If it's a function, call it.
-      if(item.target instanceof Function) {
-        item.target(item.key, value);
-      }
-      // If it's got a setter, use it.
-      else if(item.target.set && item.target.set instanceof Function) {
-        item.target.set(item.key, value);
-      }
-      // Otherwise just set the property directly.
-      else {
-        item.target[item.key] = value;
-      }
+    this._initPrivateBoundProperties();
+
+    // If it's a function, call it.
+    if(item.target instanceof Function) {
+      item.target(item.key, value);
+    }
+    // If it's got a setter, use it.
+    else if(item.target.set && item.target.set instanceof Function) {
+      item.target.set(item.key, value);
+    }
+    // Otherwise just set the property directly.
+    else {
+      item.target[item.key] = value;
+    }
 
   }.protect()
 
