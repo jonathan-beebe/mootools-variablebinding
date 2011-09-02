@@ -10,8 +10,6 @@ Element.implement({
 
     this._initPrivateBoundProperties();
 
-    console.log('will bind ' + key + ' to target', target);
-
     // If we have a custom key defined in opt_c, use it as the target's key.
     var targetKey = (typeOf(opt_c) === 'string') ? opt_c : key;
 
@@ -23,8 +21,6 @@ Element.implement({
     // notify target of user-changes to value. This is important because user-
     // edited values bypass the `set` method, so we trap them separately.
     if(this._isUserInputChange(this, key)) {
-
-      console.log('is user-changeable...will bind to event');
 
       if(!this._boundEvents[key]) {
         this._boundEvents = {};
@@ -60,8 +56,6 @@ Element.implement({
       key: targetKey
     });
 
-    console.log('this._bound', this._bound);
-
     // Are we binding two-ways?
     if (twoWay && typeOf(target.bindVar) === 'function') {
       // bind target.targetKey to this.key
@@ -87,8 +81,6 @@ Element.implement({
    */
   _isUserInputChange: function(elem, key) {
 
-    this._initPrivateBoundProperties();
-
     // user-editable properties
     var props = ['value', 'checked', 'selected'];
     // user-editable elements
@@ -106,6 +98,7 @@ Element.implement({
   unbindVar: function(key, target, opt_c) {
 
     this._initPrivateBoundProperties();
+
     // If we have a custom key defined in opt_c, use it as the target's key.
     var targetKey = (typeOf(opt_c) === 'string') ? opt_c : key;
 
@@ -141,7 +134,6 @@ Element.implement({
    * Copied from Mootools Element, with additions
    */
   set: function(prop, value){
-    this._initPrivateBoundProperties();
     var property = Element.Properties[prop];
     (property && property.set) ? property.set.call(this, value) : this.setProperty(prop, value);
     this._notifyAll(prop, value);
