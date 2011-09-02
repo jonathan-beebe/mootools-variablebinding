@@ -19,6 +19,11 @@ This project includes google's closure library in the `vendors` folder. It's
 only used for the unit testing. Overkill? Yes. But it's what I'm used to. If
 you have a simpler suggestion I'm all ears.
 
+If you want to run the `tests.html` file don't forget to  init the submodule:
+
+	git submodule init
+	git submodule update
+
 Examples
 ========
 
